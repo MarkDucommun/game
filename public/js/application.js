@@ -1,6 +1,24 @@
 $(document).ready(function() {
   var one = new Box(0, 0, 'red')
   one.paint()
+  $(document).on('keyup', function(e){
+    if(e.keyCode == 65){
+      console.log('left')
+      one.move(one.getX() - 1, one.getY())
+    }
+    if(e.keyCode == 87){
+      console.log('up')
+      one.move(one.getX(), one.getY() + 1)
+    }
+    if(e.keyCode == 68){
+      console.log('right')
+      one.move(one.getX() + 1, one.getY())
+    }
+    if(e.keyCode == 83){
+      console.log('down')
+      one.move(one.getX(), one.getY() - 1)
+    }
+  })
 });
 
 function Position(x, y, color){
@@ -38,11 +56,20 @@ Position.prototype = {
   },
 
   move : function(x, y){
+    this.unpaint()
+    this.setX(x)
+    this.setY(y)
+    this.paint()
   },
 
   paint : function(){
     var square = $('#sq' + (this.getY() * 4 + this.getX()))
     square.css('background', this.getColor())
+  },
+
+  unpaint : function(){
+    var square = $('#sq' + (this.getY() * 4 + this.getX()))
+    square.css('background', 'none') 
   }
 }
 
@@ -51,16 +78,9 @@ function Box(x, y, color){
 }
 
 Box.prototype = Object.create(Position.prototype, {
-  move : function(x, y){
-    this.setX(x)
-    this.setY(y)
-    this.paint()
-  }
+ 
 })
 
 function Obstacle(x, y, color){
-  this.position = new Position(x, y, color)
+  Position.call(this, x, y, color)
 }
-
-
-
